@@ -61,6 +61,9 @@ then
         # Get mod filename and add to modlist.txt
         ModFilename=$(ls ./ConanSandbox/Mods/$i)
         echo "/home/container/ConanSandbox/Mods/$i/$ModFilename" >> ./ConanSandbox/Mods/modlist.txt
+        echo -e "${GREEN}Added ${CYAN}$i${GREEN} to modlist.txt${NC}\n"
+        echo -e "${YELLOW}Modlist is now:\n"
+        printf '%b\n' "$(cat ./ConanSandbox/Mods/modlist.txt)${NC}\n"
 	done
 	echo -e "\n${GREEN}STARTUP: Download/Update Steam Workshop mods complete!${NC}\n"
 fi
