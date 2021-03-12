@@ -45,8 +45,8 @@ fi
 # Download/Update specified Steam Workshop mods, if specified
 if [[ -n ${UPDATE_WORKSHOP} ]];
 then
-    # Remove all existing mods and modfile.txt to redownload and recreate
-    rm -rf ./ConanSandbox/Mods/*
+    # Remove existing modlist.txt and recreate
+    rm -f ./ConanSandbox/Mods/modlist.txt
     touch ./ConanSandbox/Mods/modlist.txt
 
     # Loop through mod list
@@ -54,15 +54,12 @@ then
 	do
 		echo -e "\n${GREEN}STARTUP:${NC} Downloading/Updating Steam Workshop mod ID: ${CYAN}$i${NC}...\n"
 		./steamcmd/steamcmd.sh +login ${STEAM_USER} ${STEAM_PASS} +workshop_download_item $GameID $i validate +quit
-		# Move the downloaded mod to the mods folder in the root directory
-		mkdir -p ./ConanSandbox/Mods/$i
-		mv -f ./Steam/steamapps/workshop/content/$GameID/$i/* ./ConanSandbox/Mods/$i
-		rm -d ./Steam/steamapps/workshop/content/$GameID/$i
+
         # Get mod filename and add to modlist.txt
-        ModFilename=$(ls ./ConanSandbox/Mods/$i)
-        echo "/home/container/ConanSandbox/Mods/$i/$ModFilename" >> ./ConanSandbox/Mods/modlist.txt
-        echo -e "${GREEN}Added ${CYAN}$i${GREEN} to modlist.txt${NC}\n"
-        echo -e "${YELLOW}Modlist is now:\n"
+        ModFilename=$(ls ./Steam/steamapps/workshop/content/$GameID/$i)
+        echo "/home/container/Steam/steamapps/workshop/content/$GameID/$i/$ModFilename" >> ./ConanSandbox/Mods/modlist.txt
+        echo -e "\n${GREEN}Added ${CYAN}$i${GREEN} to modlist.txt${NC}\n"
+        echo -e "${YELLOW}Modlist is now:"
         printf '%b\n' "$(cat ./ConanSandbox/Mods/modlist.txt)${NC}\n"
 	done
 	echo -e "\n${GREEN}STARTUP: Download/Update Steam Workshop mods complete!${NC}\n"
